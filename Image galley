@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery with Album</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: brown;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 20px;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 800px;
+            justify-content: center;
+        }
+
+        .gallery-item {
+            width: 100px;
+            margin: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-button, .save-button {
+            background-color: white;
+            border: none;
+            color: black;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 18px;
+            margin: 5px;
+        }
+
+        .nav-button:hover, .save-button:hover {
+            background-color: #ddd;
+        }
+
+        .album {
+            margin-top: 20px;
+            max-width: 800px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .album-item {
+            width: 200px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Gallery with Album</h1>
+    <div class="gallery">
+       <img src="download (1).jfif" alt="Image 1" class="gallery-item">
+        <img src="download (2).jfif" alt="Image 2" class="gallery-item">
+        <img src="download (3).jfif" alt="Image 3" class="gallery-item">
+        <img src="download (4).jfif" alt="Image 4" class="gallery-item">
+        <img src="download.jfif" alt="Image 4" class="gallery-item">
+        <img src="donum.png" alt="Image 4" class="gallery-item">
+         <img src="logodonum.png" alt="Image 4" class="gallery-item">
+            <img src="download (5).jfif" alt="Image 4" class="gallery-item">
+               <img src="download (6).jfif" alt="Image 4" class="gallery-item">
+   <img src="download (7).jfif" alt="Image 4" class="gallery-item">
+      <img src="download (8).jfif" alt="Image 4" class="gallery-item">
+         <img src="images (6).jfif" alt="Image 4" class="gallery-item">
+           <img src="images (1).jfif" alt="Image 4" class="gallery-item">
+             <img src="images (2).jfif" alt="Image 4" class="gallery-item">
+      <img src="images (3).jfif" alt="Image 4" class="gallery-item">
+        <img src="images (4).jfif" alt="Image 4" class="gallery-item">
+          <img src="images (5).jfif" alt="Image 4" class="gallery-item">
+            <img src="images (7).jfif" alt="Image 4" class="gallery-item">
+              <img src="images (8).jfif" alt="Image 4" class="gallery-item">
+                <img src="images (9).jfif" alt="Image 4" class="gallery-item">
+     <img src="download (9).jfif" alt="Image 4" class="gallery-item">    
+     <img src="download (10).jfif" alt="Image 4" class="gallery-item"> 
+     <img src="download (11).jfif" alt="Image 4" class="gallery-item"> 
+     <img src="download (12).jfif" alt="Image 4" class="gallery-item">  
+     <img src="download (13).jfif" alt="Image 4" class="gallery-item"> 
+    </div>
+
+    <div id="modal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modal-image">
+        <div class="caption" id="caption"></div>
+        <button id="prev" class="nav-button">❮ Previous</button>
+        <button id="next" class="nav-button">Next ❯</button>
+        <button id="save" class="save-button">Save to Album</button>
+    </div>
+
+    <h2>ALBUM</h2>
+    <div id="album" class="album"></div>
+
+    <script>
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modal-image');
+        const caption = document.getElementById('caption');
+        const closeButton = document.querySelector('.close');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        const saveButton = document.getElementById('save');
+        const album = document.getElementById('album');
+
+        let currentIndex = 0;
+
+        // Open modal and display image
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentIndex = index;
+                showImage(index);
+            });
+        });
+
+        // Show image in modal
+        function showImage(index) {
+            modal.style.display = 'block';
+            modalImage.src = galleryItems[index].src;
+            caption.innerHTML = galleryItems[index].alt;
+        }
+
+        // Close modal
+        closeButton.onclick = function() {
+            modal.style.display = 'none';
+        };
+
+        // Navigation buttons
+        prevButton.onclick = function() {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : galleryItems.length - 1;
+            showImage(currentIndex);
+        };
+
+        nextButton.onclick = function() {
+            currentIndex = (currentIndex < galleryItems.length - 1) ? currentIndex + 1 : 0;
+            showImage(currentIndex);
+        };
+
+        // Save image to album
+        saveButton.onclick = function() {
+            const imageSrc = galleryItems[currentIndex].src;
+            const imageAlt = galleryItems[currentIndex].alt;
+            saveToAlbum(imageSrc, imageAlt);
+        };
+
+        // Save to album
+        function saveToAlbum(src, alt) {
+            const albumData = JSON.parse(localStorage.getItem('album')) || [];
+            if (!albumData.some(item => item.src === src)) {
+                albumData.push({ src, alt });
+                localStorage.setItem('album', JSON.stringify(albumData));
+                renderAlbum();
+            } else {
+                alert('This image is already in your album!');
+            }
+        }
+
+        // Render album
+        function renderAlbum() {
+            album.innerHTML = '';
+            const albumData = JSON.parse(localStorage.getItem('album')) || [];
+            albumData.forEach(item => {
+                const img = document.createElement('img');
+                img.src = item.src;
+                img.alt = item.alt;
+                img.className = 'album-item';
+                img.onclick = () => showImage(galleryItems.length); // Show larger if needed
+                album.appendChild(img);
+            });
+        }
+
+        // Close modal when clicking outside of the image
+        modal.onclick = function(event) {
+            if (event.target !== modalImage) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Load album on page load
+        window.onload = function() {
+            renderAlbum();
+        };
+    </script>
+</body>
+</html>
